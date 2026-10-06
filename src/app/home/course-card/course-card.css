@@ -86,3 +86,11 @@
   font-weight: 700;
   color: var(--ink);
 }
+
+.consult {
+  margin-top: auto;
+}
+
+.meta + .consult {
+  margin-top: 0;
+}

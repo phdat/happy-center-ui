@@ -1,7 +1,8 @@
-/** Must stay in sync with the backend enum `com.happy.center.contact.Course`. */
-export type CourseId = 'KIDS' | 'TOEIC' | 'VSTEP' | 'OFFICE' | 'AI';
-
-export type CourseTrack = 'english' | 'computer';
+/**
+ * Course id, e.g. "KIDS", "TOEIC". Comes from the "Mã" column of the "Khóa học" sheet
+ * (see apps-script/Code.gs), so it is a plain string rather than a fixed union.
+ */
+export type CourseId = string;
 
 export interface CourseMeta {
   label: string;
@@ -10,7 +11,8 @@ export interface CourseMeta {
 
 export interface Course {
   id: CourseId;
-  track: CourseTrack;
+  /** Section the course is listed under, e.g. "Tiếng Anh", "Tin học". */
+  group: string;
   /** Short name used on chips and in confirmations. */
   shortName: string;
   title: string;
@@ -20,19 +22,14 @@ export interface Course {
   meta: CourseMeta[];
 }
 
-export const TRACK_LABELS: Record<CourseTrack, string> = {
-  english: 'Tiếng Anh',
-  computer: 'Tin học',
-};
-
 /**
- * Course catalogue. Values in [BRACKETS] are placeholders the center still has to fill in.
- * Later this can come from the API instead of being hard-coded.
+ * Built-in copy of the course list. The live list is loaded from the Google Sheet
+ * (CourseStore); this is only used if the sheet can't be reached.
  */
-export const COURSES: readonly Course[] = [
+export const FALLBACK_COURSES: readonly Course[] = [
   {
     id: 'KIDS',
-    track: 'english',
+    group: 'Tiếng Anh',
     shortName: 'Tiếng Anh cho bé',
     title: 'Tiếng Anh cho bé',
     tag: 'Thiếu nhi',
@@ -49,7 +46,7 @@ export const COURSES: readonly Course[] = [
   },
   {
     id: 'TOEIC',
-    track: 'english',
+    group: 'Tiếng Anh',
     shortName: 'TOEIC',
     title: 'Luyện thi TOEIC',
     tag: 'Sinh viên & người đi làm',
@@ -66,7 +63,7 @@ export const COURSES: readonly Course[] = [
   },
   {
     id: 'VSTEP',
-    track: 'english',
+    group: 'Tiếng Anh',
     shortName: 'VSTEP',
     title: 'Luyện thi VSTEP',
     tag: 'Chứng chỉ bậc 3 – 5',
@@ -84,7 +81,7 @@ export const COURSES: readonly Course[] = [
   },
   {
     id: 'OFFICE',
-    track: 'computer',
+    group: 'Tin học',
     shortName: 'Tin học văn phòng',
     title: 'Tin học văn phòng',
     tag: 'Word · Excel · PowerPoint',
@@ -101,7 +98,7 @@ export const COURSES: readonly Course[] = [
   },
   {
     id: 'AI',
-    track: 'computer',
+    group: 'Tin học',
     shortName: 'Ứng dụng AI',
     title: 'Ứng dụng AI',
     tag: 'Kỹ năng mới',
@@ -118,7 +115,3 @@ export const COURSES: readonly Course[] = [
     ],
   },
 ];
-
-export function findCourse(id: CourseId): Course | undefined {
-  return COURSES.find((c) => c.id === id);
-}

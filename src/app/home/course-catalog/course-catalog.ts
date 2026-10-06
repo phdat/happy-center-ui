@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { COURSES, CourseId, CourseTrack, TRACK_LABELS } from '../../core/course.model';
+import { CourseId } from '../../core/course.model';
+import { CourseStore } from '../../core/course.store';
 import { EnrollmentIntentService } from '../../core/enrollment-intent.service';
 import { CourseCard } from '../course-card/course-card';
 
@@ -11,12 +12,7 @@ import { CourseCard } from '../course-card/course-card';
 })
 export class CourseCatalog {
   private readonly intent = inject(EnrollmentIntentService);
-
-  protected readonly tracks = (['english', 'computer'] as CourseTrack[]).map((track) => ({
-    track,
-    label: TRACK_LABELS[track],
-    courses: COURSES.filter((c) => c.track === track),
-  }));
+  protected readonly store = inject(CourseStore);
 
   protected onConsult(id: CourseId): void {
     this.intent.requestCourse(id);

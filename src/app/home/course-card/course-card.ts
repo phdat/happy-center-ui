@@ -6,11 +6,12 @@ import { Course, CourseId } from '../../core/course.model';
   templateUrl: './course-card.html',
   styleUrl: './course-card.css',
   host: {
-    '[class.english]': "course().track === 'english'",
-    '[class.computer]': "course().track === 'computer'",
+    '[class.computer]': "variant() === 'blue'",
   },
 })
 export class CourseCard {
   readonly course = input.required<Course>();
+  /** Card colour, alternates per course group. */
+  readonly variant = input<'sun' | 'blue'>('sun');
   readonly consult = output<CourseId>();
 }

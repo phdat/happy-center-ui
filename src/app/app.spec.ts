@@ -1,12 +1,14 @@
 import { provideHttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { App } from './app';
+import { CONTACT_ENDPOINT } from './core/contact.service';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideHttpClient()],
+      // No endpoint → CourseStore uses the built-in course list, no network in tests.
+      providers: [provideHttpClient(), { provide: CONTACT_ENDPOINT, useValue: '' }],
     }).compileComponents();
   });
 

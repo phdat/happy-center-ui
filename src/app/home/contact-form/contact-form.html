@@ -95,7 +95,7 @@
     <fieldset class="group">
       <legend>Khóa học quan tâm <span class="optional">(chọn một hoặc nhiều)</span></legend>
       <div class="chips">
-        @for (c of courses; track c.id) {
+        @for (c of courses(); track c.id) {
           <button
             type="button"
             class="chip"

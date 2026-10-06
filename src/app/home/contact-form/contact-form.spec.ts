@@ -31,6 +31,16 @@ describe('ContactForm', () => {
     fixture = TestBed.createComponent(ContactForm);
     el = fixture.nativeElement;
     http = TestBed.inject(HttpTestingController);
+    // CourseStore loads the course list from the sheet first.
+    http
+      .expectOne((r) => r.method === 'GET' && r.params.get('action') === 'courses')
+      .flush({
+        ok: true,
+        courses: [
+          { id: 'KIDS', group: 'Tiếng Anh', shortName: 'Tiếng Anh cho bé', title: 'Tiếng Anh cho bé' },
+          { id: 'TOEIC', group: 'Tiếng Anh', shortName: 'TOEIC', title: 'Luyện thi TOEIC' },
+        ],
+      });
     await fixture.whenStable();
   });
 

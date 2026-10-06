@@ -39,6 +39,35 @@ Browser ──> https://<project>.pages.dev  (static Angular build)
 **Changing the script later:** edit the code, then **Deploy → Manage deployments → ✏️ → Version: New version → Deploy**.
 That keeps the same URL. ("New deployment" would create a new URL you'd have to paste again.)
 
+## 1b. Courses from the Google Sheet
+
+The course cards (and the course chips in the form) are loaded from a **"Khóa học"** tab in the same sheet.
+
+1. Paste the latest [`apps-script/Code.gs`](apps-script/Code.gs) into the Apps Script editor
+   (keep your own `NOTIFY_EMAIL` value), then **Deploy → Manage deployments → ✏️ → Version: New version → Deploy**.
+   The URL stays the same.
+2. In the editor, choose the function **`setupCoursesSheet`** in the toolbar and click **▶ Run** once.
+   It creates the "Khóa học" tab filled with the current 5 courses.
+
+Editing courses (staff can do this, no code):
+
+| Column | Meaning |
+| --- | --- |
+| Mã | Short unique code, e.g. `IELTS` (don't change it once people have registered with it) |
+| Nhóm | Section heading, e.g. `Tiếng Anh`, `Tin học`, or a new one like `Luyện thi` |
+| Tên ngắn | Name on the form chips / confirmation |
+| Tên khóa | Card title |
+| Nhãn | Small tag on the card |
+| Mô tả | One-sentence description |
+| Điểm nổi bật | One point per line (Alt/Ctrl+Enter for a new line in a cell) |
+| Thông tin | One `Nhãn: Giá trị` per line, e.g. `Học phí: 1.500.000 đ` |
+| Hiển thị | Tick to show on the website, untick to hide |
+
+- Row order = order on the website. Groups appear in the order they first appear.
+- Edits show on the website on the next page load (the script caches the list for at most 5 minutes; editing the tab clears the cache).
+- If the sheet can't be reached, the website shows the built-in list in `src/app/core/course.model.ts`
+  (update that file now and then so the backup isn't too outdated).
+
 ## 2. Website → Cloudflare Pages (≈5 minutes)
 
 1. Sign up / log in at <https://dash.cloudflare.com> (free).

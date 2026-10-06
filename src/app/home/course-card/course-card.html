@@ -15,16 +15,18 @@
     }
   </ul>
 
-  <dl class="meta">
-    @for (m of c.meta; track m.label) {
-      <div>
-        <dt>{{ m.label }}:</dt>
-        <dd>{{ m.value }}</dd>
-      </div>
-    }
-  </dl>
+  @if (c.meta.length) {
+    <dl class="meta">
+      @for (m of c.meta; track m.label) {
+        <div>
+          <dt>{{ m.label }}:</dt>
+          <dd>{{ m.value }}</dd>
+        </div>
+      }
+    </dl>
+  }
 
-  <a href="#contact" class="btn btn-dark" (click)="consult.emit(c.id)">
+  <a href="#contact" class="btn btn-dark consult" (click)="consult.emit(c.id)">
     Tư vấn khóa này<span class="sr-only">: {{ c.title }}</span>
   </a>
 </article>

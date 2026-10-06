@@ -3,7 +3,8 @@ import { FormField, FormRoot, email, form, maxLength, pattern, required } from '
 import { firstValueFrom } from 'rxjs';
 import { ContactAudience, ContactRequest } from '../../core/contact.model';
 import { ContactService } from '../../core/contact.service';
-import { COURSES, CourseId, findCourse } from '../../core/course.model';
+import { CourseId } from '../../core/course.model';
+import { CourseStore } from '../../core/course.store';
 import { EnrollmentIntentService } from '../../core/enrollment-intent.service';
 
 interface ContactFormModel {
@@ -62,8 +63,9 @@ export class ContactForm {
   private readonly contactService = inject(ContactService);
   private readonly intent = inject(EnrollmentIntentService);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly courseStore = inject(CourseStore);
 
-  protected readonly courses = COURSES;
+  protected readonly courses = this.courseStore.courses;
   protected readonly submitted = signal<SubmittedInfo | null>(null);
   protected readonly serverError = signal<string | null>(null);
 
@@ -133,7 +135,7 @@ export class ContactForm {
     const request = toContactRequest(this.model());
     try {
       await firstValueFrom(this.contactService.create(request));
-      const names = request.courses.map((id) => findCourse(id)?.shortName ?? id);
+      const names = request.courses.map((id) => this.courseStore.find(id)?.shortName ?? id);
       this.submitted.set({
         name: request.fullName.split(/\s+/).pop() ?? request.fullName,
         phone: request.phone,

@@ -8,20 +8,28 @@
       </p>
     </header>
 
-    @for (t of tracks; track t.track) {
-      <div class="track">
-        <div class="track-head">
-          <h3 class="pill" [class.pill-english]="t.track === 'english'" [class.pill-computer]="t.track === 'computer'">
-            {{ t.label }}
-          </h3>
-          <span class="rule" aria-hidden="true"></span>
-        </div>
-        <div class="grid">
-          @for (course of t.courses; track course.id) {
-            <app-course-card [course]="course" (consult)="onConsult($event)" />
-          }
-        </div>
+    @if (store.state() === 'loading') {
+      <div class="grid" aria-busy="true" aria-label="Đang tải danh sách khóa học">
+        @for (i of [1, 2, 3]; track i) {
+          <div class="skeleton" aria-hidden="true"></div>
+        }
       </div>
+    } @else {
+      @for (g of store.groups(); track g.name) {
+        <div class="track">
+          <div class="track-head">
+            <h3 class="pill" [class.pill-english]="g.variant === 'sun'" [class.pill-computer]="g.variant === 'blue'">
+              {{ g.name }}
+            </h3>
+            <span class="rule" aria-hidden="true"></span>
+          </div>
+          <div class="grid">
+            @for (course of g.courses; track course.id) {
+              <app-course-card [course]="course" [variant]="g.variant" (consult)="onConsult($event)" />
+            }
+          </div>
+        </div>
+      }
     }
   </div>
 </section>
