@@ -54,27 +54,6 @@
   gap: 24px;
 }
 
-.skeleton {
-  height: 420px;
-  border: 2px solid var(--line);
-  border-radius: 22px;
-  background: linear-gradient(90deg, #f4f2ec 0%, #fbfaf6 50%, #f4f2ec 100%);
-  background-size: 200% 100%;
-  animation: shimmer 1.4s linear infinite;
-}
-
-@keyframes shimmer {
-  to {
-    background-position: -200% 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .skeleton {
-    animation: none;
-  }
-}
-
 @media (max-width: 600px) {
   .inner {
     gap: 40px;

@@ -1,4 +1,4 @@
-import { Component, ElementRef, effect, inject, signal, untracked } from '@angular/core';
+import { Component, ElementRef, computed, effect, inject, signal, untracked } from '@angular/core';
 import { FormField, FormRoot, email, form, maxLength, pattern, required } from '@angular/forms/signals';
 import { firstValueFrom } from 'rxjs';
 import { ContactAudience, ContactRequest } from '../../core/contact.model';
@@ -66,6 +66,7 @@ export class ContactForm {
   private readonly courseStore = inject(CourseStore);
 
   protected readonly courses = this.courseStore.courses;
+  protected readonly coursesLoading = computed(() => this.courseStore.state() === 'loading');
   protected readonly submitted = signal<SubmittedInfo | null>(null);
   protected readonly serverError = signal<string | null>(null);
 

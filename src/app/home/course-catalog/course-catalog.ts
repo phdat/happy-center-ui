@@ -3,10 +3,11 @@ import { CourseId } from '../../core/course.model';
 import { CourseStore } from '../../core/course.store';
 import { EnrollmentIntentService } from '../../core/enrollment-intent.service';
 import { CourseCard } from '../course-card/course-card';
+import { CourseCardSkeleton } from '../course-card-skeleton/course-card-skeleton';
 
 @Component({
   selector: 'app-course-catalog',
-  imports: [CourseCard],
+  imports: [CourseCard, CourseCardSkeleton],
   templateUrl: './course-catalog.html',
   styleUrl: './course-catalog.css',
 })

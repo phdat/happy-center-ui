@@ -9,10 +9,17 @@
     </header>
 
     @if (store.state() === 'loading') {
-      <div class="grid" aria-busy="true" aria-label="Đang tải danh sách khóa học">
-        @for (i of [1, 2, 3]; track i) {
-          <div class="skeleton" aria-hidden="true"></div>
-        }
+      <div class="track" aria-busy="true">
+        <span class="sr-only" role="status">Đang tải danh sách khóa học…</span>
+        <div class="track-head" aria-hidden="true">
+          <span class="bone bone-pill" style="width: 120px; height: 38px"></span>
+          <span class="rule"></span>
+        </div>
+        <div class="grid">
+          @for (i of [1, 2, 3]; track i) {
+            <app-course-card-skeleton />
+          }
+        </div>
       </div>
     } @else {
       @for (g of store.groups(); track g.name) {

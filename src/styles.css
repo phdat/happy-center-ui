@@ -187,3 +187,32 @@ textarea {
   font-weight: 700;
   font-size: 15px;
 }
+
+/* ===== Skeleton placeholders (shown while content loads) ===== */
+.bone {
+  display: block;
+  border-radius: 8px;
+  background-color: #ebe8e0;
+  background-image: linear-gradient(90deg, transparent 0, rgba(255, 255, 255, 0.65) 50%, transparent 100%);
+  background-repeat: no-repeat;
+  background-size: 600px 100%;
+  background-position: -600px 0;
+  animation: bone-shimmer 1.3s ease-in-out infinite;
+}
+
+.bone-pill {
+  border-radius: var(--radius-pill);
+}
+
+@keyframes bone-shimmer {
+  to {
+    background-position: calc(100% + 600px) 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bone {
+    animation: none;
+    background-image: none;
+  }
+}
