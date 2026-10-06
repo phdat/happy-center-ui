@@ -54,7 +54,7 @@ That keeps the same URL. ("New deployment" would create a new URL you'd have to 
    | Build output directory | `dist/happy-web/browser` |
    | Root directory | *(leave empty)* |
 
-   Node version comes from the `.node-version` file (24).
+   Node version comes from the `.node-version` file (pinned to an exact version: Angular 22 needs Node ≥ 24.15).
 
 4. **Save and Deploy**. The first build takes ~2 minutes.
 5. Every later `git push` to `main` redeploys automatically. Other branches get their own preview URL.
