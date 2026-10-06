@@ -1,0 +1,28 @@
+<section id="top" class="container hero">
+  <div class="copy">
+    <span class="eyebrow">Trung tâm Anh ngữ &amp; Tin học Hạnh Phúc</span>
+    <h1 class="title">Học vui mỗi ngày, tiến bộ thật mỗi khóa.</h1>
+    <p class="lead">
+      Tiếng Anh thiếu nhi, luyện thi TOEIC, VSTEP và tin học văn phòng, ứng dụng AI — cả nhà cùng
+      học tại một trung tâm.
+    </p>
+    <div class="actions">
+      <a href="#contact" class="btn btn-primary btn-lg">
+        Nhận tư vấn lộ trình
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </a>
+      <a href="#courses" class="btn btn-outline btn-lg">Xem các khóa học</a>
+    </div>
+  </div>
+
+  <div class="visual" aria-hidden="true">
+    <div class="sun"></div>
+    <!-- TODO: thay khung này bằng ảnh lớp học thật: <img src="..." alt="..."> -->
+    <div class="photo"><span>[Ảnh lớp học tại Happy]</span></div>
+    @for (s of stickers; track s.label) {
+      <span class="sticker {{ s.variant }} {{ s.pos }}">{{ s.label }}</span>
+    }
+  </div>
+</section>

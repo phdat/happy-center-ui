@@ -1,0 +1,62 @@
+.band {
+  background: var(--surface);
+  border-block: 2px solid var(--ink);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+  padding-block: 88px;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 720px;
+}
+
+.track {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.track-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.track-head h3 {
+  margin: 0;
+}
+
+.pill-english {
+  background: var(--sun);
+}
+
+.pill-computer {
+  background: var(--blue);
+  color: #fff;
+}
+
+.rule {
+  flex-grow: 1;
+  height: 2px;
+  background: var(--line);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  gap: 24px;
+}
+
+@media (max-width: 600px) {
+  .inner {
+    gap: 40px;
+    padding-block: 56px;
+  }
+}

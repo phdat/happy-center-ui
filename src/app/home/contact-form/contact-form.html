@@ -1,0 +1,145 @@
+@if (submitted(); as done) {
+  <div class="success" role="status">
+    <span class="success-icon" aria-hidden="true">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 12l5 5 9-10" />
+      </svg>
+    </span>
+    <h3>Cảm ơn {{ done.name }}!</h3>
+    <p>
+      Happy đã nhận thông tin. Tư vấn viên sẽ gọi cho bạn qua số
+      <strong>{{ done.phone }}</strong> để tư vấn {{ done.courses }}.
+    </p>
+    <button type="button" class="btn btn-outline" (click)="reset()">Gửi thêm một đăng ký</button>
+  </div>
+} @else {
+  @let f = contactForm;
+  <form [formRoot]="contactForm" novalidate class="form">
+    <fieldset class="group">
+      <legend>Đăng ký cho</legend>
+      <div class="segmented">
+        <label class="seg" [class.on]="model().audience === 'SELF'">
+          <input type="radio" name="audience" value="SELF" [checked]="model().audience === 'SELF'" (change)="setAudience('SELF')" />
+          Bản thân tôi
+        </label>
+        <label class="seg" [class.on]="model().audience === 'CHILD'">
+          <input type="radio" name="audience" value="CHILD" [checked]="model().audience === 'CHILD'" (change)="setAudience('CHILD')" />
+          Con của tôi
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="row">
+      <div class="field">
+        <label for="f-name">
+          {{ model().audience === 'CHILD' ? 'Họ tên phụ huynh' : 'Họ và tên' }}
+          <span class="req" aria-hidden="true">*</span>
+        </label>
+        @let name = f.fullName();
+        <input
+          id="f-name"
+          type="text"
+          autocomplete="name"
+          placeholder="Nguyễn Văn A"
+          [formField]="f.fullName"
+          [attr.aria-invalid]="name.touched() && name.invalid()"
+          aria-describedby="f-name-err"
+        />
+        <span id="f-name-err" class="error" aria-live="polite">
+          @if (name.touched() && name.invalid()) {
+            {{ name.errors()[0].message }}
+          }
+        </span>
+      </div>
+
+      <div class="field">
+        <label for="f-phone">Số điện thoại <span class="req" aria-hidden="true">*</span></label>
+        @let phone = f.phone();
+        <input
+          id="f-phone"
+          type="tel"
+          autocomplete="tel"
+          inputmode="tel"
+          placeholder="09xx xxx xxx"
+          [formField]="f.phone"
+          [attr.aria-invalid]="phone.touched() && phone.invalid()"
+          aria-describedby="f-phone-err"
+        />
+        <span id="f-phone-err" class="error" aria-live="polite">
+          @if (phone.touched() && phone.invalid()) {
+            {{ phone.errors()[0].message }}
+          }
+        </span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="f-email">Email <span class="optional">(không bắt buộc)</span></label>
+      @let mail = f.email();
+      <input
+        id="f-email"
+        type="email"
+        autocomplete="email"
+        placeholder="ban@email.com"
+        [formField]="f.email"
+        [attr.aria-invalid]="mail.touched() && mail.invalid()"
+        aria-describedby="f-email-err"
+      />
+      <span id="f-email-err" class="error" aria-live="polite">
+        @if (mail.touched() && mail.invalid()) {
+          {{ mail.errors()[0].message }}
+        }
+      </span>
+    </div>
+
+    <fieldset class="group">
+      <legend>Khóa học quan tâm <span class="optional">(chọn một hoặc nhiều)</span></legend>
+      <div class="chips">
+        @for (c of courses; track c.id) {
+          <button
+            type="button"
+            class="chip"
+            [class.on]="isSelected(c.id)"
+            [attr.aria-pressed]="isSelected(c.id)"
+            (click)="toggleCourse(c.id)"
+          >
+            @if (isSelected(c.id)) {
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12l5 5 9-10" />
+              </svg>
+            }
+            {{ c.shortName }}
+          </button>
+        }
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for="f-note">Ghi chú</label>
+      @let note = f.note();
+      <textarea
+        id="f-note"
+        rows="3"
+        placeholder="Lịch học mong muốn, độ tuổi của bé, điểm mục tiêu…"
+        [formField]="f.note"
+        [attr.aria-invalid]="note.touched() && note.invalid()"
+      ></textarea>
+      <span class="error" aria-live="polite">
+        @if (note.touched() && note.invalid()) {
+          {{ note.errors()[0].message }}
+        }
+      </span>
+    </div>
+
+    @if (serverError(); as msg) {
+      <p class="server-error" role="alert">{{ msg }}</p>
+    }
+
+    <div class="submit">
+      <button type="submit" class="btn btn-primary btn-lg" [disabled]="f().submitting()">
+        {{ f().submitting() ? 'Đang gửi…' : 'Gửi thông tin' }}
+      </button>
+      <p class="privacy">Thông tin chỉ dùng để Happy liên hệ tư vấn cho bạn.</p>
+    </div>
+  </form>
+}

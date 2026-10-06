@@ -1,0 +1,27 @@
+<section id="courses" class="band" aria-labelledby="courses-title">
+  <div class="container inner">
+    <header class="intro">
+      <h2 id="courses-title" class="section-title">Chọn khóa học phù hợp</h2>
+      <p class="section-lead">
+        Hai chương trình chính — Tiếng Anh và Tin học. Chưa biết bắt đầu từ đâu? Để lại thông tin,
+        Happy tư vấn giúp bạn.
+      </p>
+    </header>
+
+    @for (t of tracks; track t.track) {
+      <div class="track">
+        <div class="track-head">
+          <h3 class="pill" [class.pill-english]="t.track === 'english'" [class.pill-computer]="t.track === 'computer'">
+            {{ t.label }}
+          </h3>
+          <span class="rule" aria-hidden="true"></span>
+        </div>
+        <div class="grid">
+          @for (course of t.courses; track course.id) {
+            <app-course-card [course]="course" (consult)="onConsult($event)" />
+          }
+        </div>
+      </div>
+    }
+  </div>
+</section>

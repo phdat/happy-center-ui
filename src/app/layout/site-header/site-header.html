@@ -1,0 +1,37 @@
+<header class="header">
+  <div class="container bar">
+    <a href="#top" class="brand" aria-label="HẠNH PHÚC – về đầu trang" (click)="closeMenu()">
+      <app-logo-mark />
+      <span class="brand-text">
+        <span class="brand-name">HẠNH PHÚC</span>
+        <span class="brand-sub">ANH NGỮ &amp; TIN HỌC</span>
+      </span>
+    </a>
+
+    <button
+      type="button"
+      class="menu-toggle"
+      [attr.aria-expanded]="menuOpen()"
+      aria-controls="main-nav"
+      [attr.aria-label]="menuOpen() ? 'Đóng menu' : 'Mở menu'"
+      (click)="toggleMenu()"
+    >
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        @if (menuOpen()) {
+          <path d="M6 6l12 12M18 6L6 18" />
+        } @else {
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        }
+      </svg>
+    </button>
+
+    <nav id="main-nav" class="nav" [class.open]="menuOpen()" aria-label="Điều hướng chính">
+      <ul class="nav-links">
+        @for (link of links; track link.href) {
+          <li><a [href]="link.href" (click)="closeMenu()">{{ link.label }}</a></li>
+        }
+      </ul>
+      <a href="#contact" class="btn btn-primary" (click)="closeMenu()">Đăng ký tư vấn</a>
+    </nav>
+  </div>
+</header>

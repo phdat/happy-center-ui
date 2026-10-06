@@ -1,0 +1,88 @@
+:host {
+  display: flex;
+  --card-bg: var(--sun-soft);
+  --card-line: var(--sun-line);
+  --card-tag: var(--sun-text);
+}
+
+:host(.computer) {
+  --card-bg: var(--blue-soft);
+  --card-line: var(--blue-line);
+  --card-tag: var(--blue-text);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  padding: 28px;
+  border: 2px solid var(--ink);
+  border-radius: 22px;
+  background: var(--card-bg);
+  box-shadow: var(--shadow-md);
+}
+
+.tag {
+  align-self: flex-start;
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--card-tag);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(27px, 2.4vw, 30px);
+  line-height: 1.1;
+}
+
+.desc {
+  color: var(--muted);
+}
+
+.highlights {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+}
+
+.highlights li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.highlights svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: auto 0 0;
+  padding-top: 16px;
+  border-top: 2px dashed var(--card-line);
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.meta div {
+  display: flex;
+  gap: 6px;
+}
+
+.meta dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--ink);
+}
