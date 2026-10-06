@@ -1,7 +1,10 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { CONTACT_ENDPOINT } from '../../core/contact.service';
 import { ContactForm, VN_PHONE, toContactRequest } from './contact-form';
+
+const ENDPOINT = 'https://script.example.test/exec';
 
 describe('ContactForm', () => {
   let fixture: ComponentFixture<ContactForm>;
@@ -19,7 +22,11 @@ describe('ContactForm', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ContactForm],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: CONTACT_ENDPOINT, useValue: ENDPOINT },
+      ],
     }).compileComponents();
     fixture = TestBed.createComponent(ContactForm);
     el = fixture.nativeElement;
@@ -36,7 +43,7 @@ describe('ContactForm', () => {
     const errors = Array.from(el.querySelectorAll('.error')).map((e) => e.textContent?.trim());
     expect(errors).toContain('Vui lòng nhập họ tên.');
     expect(errors).toContain('Vui lòng nhập số điện thoại.');
-    http.expectNone('/api/contacts');
+    http.expectNone(ENDPOINT);
   });
 
   it('rejects an invalid phone number', async () => {
@@ -45,7 +52,7 @@ describe('ContactForm', () => {
     submit();
     await fixture.whenStable();
     expect(el.querySelector('#f-phone-err')?.textContent).toContain('Số điện thoại chưa đúng');
-    http.expectNone('/api/contacts');
+    http.expectNone(ENDPOINT);
   });
 
   it('posts the normalized request and shows the thank-you message', async () => {
@@ -56,17 +63,19 @@ describe('ContactForm', () => {
     await fixture.whenStable();
     submit();
 
-    const req = http.expectOne('/api/contacts');
+    const req = http.expectOne(ENDPOINT);
     expect(req.request.method).toBe('POST');
-    expect(req.request.body).toEqual({
+    expect(req.request.headers.get('Content-Type')).toContain('text/plain');
+    expect(JSON.parse(req.request.body)).toEqual({
       audience: 'CHILD',
       fullName: 'Nguyễn Văn An',
       phone: '0912345678',
       email: null,
       courses: ['TOEIC'],
       note: null,
+      website: '',
     });
-    req.flush({ id: 1, createdAt: '2026-10-01T10:00:00Z' }, { status: 201, statusText: 'Created' });
+    req.flush({ ok: true, id: 'a1b2c3d4' });
     await fixture.whenStable();
 
     const success = el.querySelector('[role="status"]')!;
@@ -75,11 +84,21 @@ describe('ContactForm', () => {
     expect(success.textContent).toContain('khóa TOEIC');
   });
 
+  it('shows an error message when the script rejects the request', async () => {
+    type('#f-name', 'Lan');
+    type('#f-phone', '0912345678');
+    submit();
+    http.expectOne(ENDPOINT).flush({ ok: false, error: 'invalid phone' });
+    await fixture.whenStable();
+    expect(el.querySelector('.server-error')?.textContent).toContain('Chưa gửi được thông tin');
+    expect(el.querySelector('[role="status"]')).toBeNull();
+  });
+
   it('shows an error message when the server fails', async () => {
     type('#f-name', 'Lan');
     type('#f-phone', '0912345678');
     submit();
-    http.expectOne('/api/contacts').flush(null, { status: 500, statusText: 'Server Error' });
+    http.expectOne(ENDPOINT).flush(null, { status: 500, statusText: 'Server Error' });
     await fixture.whenStable();
     expect(el.querySelector('.server-error')?.textContent).toContain('Chưa gửi được thông tin');
   });
@@ -104,7 +123,16 @@ describe('VN_PHONE / toContactRequest', () => {
         email: '  ',
         courses: [],
         note: '',
+        website: '',
       }),
-    ).toEqual({ audience: 'SELF', fullName: 'A', phone: '0912345678', email: null, courses: [], note: null });
+    ).toEqual({
+      audience: 'SELF',
+      fullName: 'A',
+      phone: '0912345678',
+      email: null,
+      courses: [],
+      note: null,
+      website: '',
+    });
   });
 });

@@ -131,6 +131,12 @@
       </span>
     </div>
 
+    <!-- Honeypot: invisible to people, bots fill it in and get silently ignored. -->
+    <div class="hp" aria-hidden="true">
+      <label for="f-website">Website</label>
+      <input id="f-website" type="text" tabindex="-1" autocomplete="off" [formField]="f.website" />
+    </div>
+
     @if (serverError(); as msg) {
       <p class="server-error" role="alert">{{ msg }}</p>
     }

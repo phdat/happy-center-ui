@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, effect, inject, signal, untracked } from '@angular/core';
 import { FormField, FormRoot, email, form, maxLength, pattern, required } from '@angular/forms/signals';
 import { firstValueFrom } from 'rxjs';
@@ -14,6 +13,8 @@ interface ContactFormModel {
   email: string;
   courses: CourseId[];
   note: string;
+  /** Honeypot, see contact.model.ts */
+  website: string;
 }
 
 interface SubmittedInfo {
@@ -32,6 +33,7 @@ const EMPTY_MODEL: ContactFormModel = {
   email: '',
   courses: [],
   note: '',
+  website: '',
 };
 
 export function normalizePhone(phone: string): string {
@@ -46,6 +48,7 @@ export function toContactRequest(m: ContactFormModel): ContactRequest {
     email: m.email.trim() || null,
     courses: [...m.courses],
     note: m.note.trim() || null,
+    website: m.website,
   };
 }
 
@@ -137,11 +140,8 @@ export class ContactForm {
         courses: names.length ? `khóa ${names.join(', ')}` : 'khóa học phù hợp nhất',
       });
     } catch (err) {
-      this.serverError.set(
-        err instanceof HttpErrorResponse && err.status === 400
-          ? 'Thông tin chưa hợp lệ, vui lòng kiểm tra lại.'
-          : 'Chưa gửi được thông tin. Vui lòng thử lại hoặc gọi hotline [SỐ HOTLINE].',
-      );
+      console.error('Contact submit failed', err);
+      this.serverError.set('Chưa gửi được thông tin. Vui lòng thử lại hoặc gọi hotline của trung tâm.');
     }
   }
 
