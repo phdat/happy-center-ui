@@ -16,7 +16,7 @@
 // ===== Settings =====
 const SHEET_NAME = 'Đăng ký';
 /** Email(s) to notify on each new request, comma-separated. Leave '' to turn off. */
-const NOTIFY_EMAIL = '';
+const NOTIFY_EMAIL = 'phdat2911@gmail.com';
 
 const COURSES_SHEET = 'Khóa học';
 const COURSE_HEADERS = [
@@ -27,6 +27,9 @@ const COURSES_CACHE_KEY = 'courses-v1';
 const COURSES_CACHE_SECONDS = 300;
 
 const HEADERS = ['Thời gian', 'Mã', 'Đăng ký cho', 'Họ tên', 'Số điện thoại', 'Email', 'Khóa học', 'Ghi chú', 'Trạng thái'];
+const STATUS_COL = HEADERS.indexOf('Trạng thái') + 1;
+/** Dropdown choices for "Trạng thái". The first one is set on every new request. */
+const STATUSES = ['Mới', 'Đã liên hệ', 'Tạm hoãn', 'Liên hệ lại sau', 'Từ chối'];
 /** Used only if the "Khóa học" tab doesn't exist yet. */
 const DEFAULT_COURSE_NAMES = {
   KIDS: 'Tiếng Anh cho bé',
@@ -52,7 +55,8 @@ function doPost(e) {
     const lock = LockService.getScriptLock();
     lock.waitLock(10000);
     try {
-      sheet_().appendRow([
+      const sheet = sheet_();
+      sheet.appendRow([
         new Date(),
         id,
         AUDIENCE_NAMES[lead.audience],
@@ -61,8 +65,9 @@ function doPost(e) {
         safe_(lead.email),
         lead.courseNames.join(', '),
         safe_(lead.note),
-        'Mới',
+        STATUSES[0],
       ]);
+      sheet.getRange(sheet.getLastRow(), STATUS_COL).setDataValidation(statusRule_());
     } finally {
       lock.releaseLock();
     }
@@ -238,6 +243,20 @@ function sheet_() {
     sheet.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold');
   }
   return sheet;
+}
+
+function statusRule_() {
+  return SpreadsheetApp.newDataValidation().requireValueInList(STATUSES, true).setAllowInvalid(false).build();
+}
+
+/**
+ * Run once from the Apps Script editor (select it → ▶ Run) to turn the "Trạng thái" cells of
+ * the existing rows into a dropdown. New requests get the dropdown automatically.
+ */
+function setupStatusDropdown() {
+  const sheet = sheet_();
+  const rows = sheet.getMaxRows() - 1;
+  if (rows > 0) sheet.getRange(2, STATUS_COL, rows, 1).setDataValidation(statusRule_());
 }
 
 function notify_(id, lead) {

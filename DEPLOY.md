@@ -68,6 +68,14 @@ Editing courses (staff can do this, no code):
 - If the sheet can't be reached, the website shows the built-in list in `src/app/core/course.model.ts`
   (update that file now and then so the backup isn't too outdated).
 
+## 1c. Status dropdown in "Đăng ký"
+
+New requests get **Trạng thái = Mới** with a dropdown: *Mới, Đã liên hệ, Tạm hoãn, Liên hệ lại sau, Từ chối*
+(edit `STATUSES` at the top of `Code.gs` to change the choices).
+
+1. Paste the latest `Code.gs` and deploy a new version (as in 1b, step 1).
+2. Choose the function **`setupStatusDropdown`** and click **▶ Run** once, to add the dropdown to the rows already in the sheet.
+
 ## 2. Website → Cloudflare Pages (≈5 minutes)
 
 1. Sign up / log in at <https://dash.cloudflare.com> (free).

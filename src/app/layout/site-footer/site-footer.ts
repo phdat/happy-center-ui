@@ -8,7 +8,7 @@ import { LogoMark } from '../../shared/logo/logo';
     <footer class="footer">
       <div class="container inner">
         <div class="brand">
-          <app-logo-mark [size]="40" [inverse]="true" />
+          <app-logo-mark [size]="32" [inverse]="true" />
           <span class="brand-text">
             <strong>HẠNH PHÚC</strong>
             <span>Trung tâm Anh ngữ &amp; Tin học</span>
